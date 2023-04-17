@@ -22,8 +22,6 @@ public class SpringArmManager : MonoBehaviour
     [SerializeField] private ArmTrail trailManager;
     private Vector3 handPointDirection;
 
-
-
     public ArmParticle WristParticle { get => wristParticle;}
 
 

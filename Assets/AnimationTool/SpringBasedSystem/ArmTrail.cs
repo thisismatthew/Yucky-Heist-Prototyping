@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+// I was fixing the issue with the arm allignment when retracted all the way back to first position but it appears to be fixed!
+// maybe i did it yesterday and I forgot, or maybe it's just because at low stretch/retract speeds it doesn't occur?
 
 public class ArmTrail : MonoBehaviour
 {
@@ -15,11 +17,17 @@ public class ArmTrail : MonoBehaviour
     public Color ArmColor;
     private List<Line> armSegments = new List<Line>();
     public float RetractSpeed = .5f;
+    //public bool AtFirstPosition = true;
     //private bool finalRetractionPointReached = false;
+    [Header("Wave Stuff")]
+    [SerializeField] private float Amplitude = .2f;
+    [SerializeField] private float Frequency = .3f;
+    //this next field should probably be assigned directly to each line segment via the armSpring object when I refactor
+    private List<Vector3> LineRelativeDirections = new List<Vector3>();
 
     private void Start()
     {
-        maskingLine = new GameObject().AddComponent<Line>();
+        maskingLine = new GameObject().AddComponent<Line>(); 
         maskingLine.transform.parent = transform;
         maskingLine.transform.position = transform.position;
         maskingLine.name = "MaskingLine";
@@ -36,9 +44,12 @@ public class ArmTrail : MonoBehaviour
 
         if (handLink == null) return;
         
+        //if (armSegments.Count == 1) AtFirstPosition = true; else AtFirstPosition = false;
         if (Input.GetMouseButton(1)) Retract();
         else CreateTrail();
         UpdateMaskLine(armSegments.Count == 1);
+        SimulateWave();
+
 
     }
 
@@ -55,8 +66,8 @@ public class ArmTrail : MonoBehaviour
         // if the hand link end gets too far from the current segment's end point spawn a new segment.
         if (Vector2.Distance(CurrentFrontSegment.Start, handLink.Line.End + transform.position) > newSegmentDistance)
         {
-            Debug.Log(CurrentFrontSegment.Start);
-            Debug.Log(handLink.Line.End + transform.position);
+            //Debug.Log(CurrentFrontSegment.Start);
+            //Debug.Log(handLink.Line.End + transform.position);
             //why does it create an arm particle at distance 0?
             var newSegment = new GameObject().AddComponent<Line>();
             newSegment.name = "Trail Segment - " + (armSegments.Count - 1);
@@ -67,6 +78,7 @@ public class ArmTrail : MonoBehaviour
             newSegment.Color = ArmColor;
             newSegment.Thickness = ArmWidth;
             armSegments.Add(newSegment);
+            LineRelativeDirections.Add(Vector2.Perpendicular(newSegment.Start - newSegment.End));
             CurrentFrontSegment = newSegment;
 
         }
@@ -95,15 +107,39 @@ public class ArmTrail : MonoBehaviour
         }
     }
 
+    private void SimulateWave()
+    {
+        //so we're looping through the arm segments if we have at least 2
+        if (armSegments.Count > 2)
+        {
+            for (int i = 2; i <= armSegments.Count-1; i++)
+            {
+                if (LineRelativeDirections[i] == null) return;
+                armSegments[i].End = armSegments[i - 1].Start;
+                var pos = armSegments[i].Start + (LineRelativeDirections[i] * Amplitude) * Mathf.Sin(Time.time + i * Frequency);
+                armSegments[i].Start = pos;
+            }
+            //armSegments[armSegments.Count-1].End = armSegments[armSegments.Count - 2].Start;
+        }
+    }
+
     private void OnDrawGizmos()
     {
+        //for (int i = 1; i < armSegments.Count - 2; i++)
+        //{
+        //    Vector3 RelativeDirection = Vector2.Perpendicular(armSegments[i].Start - armSegments[i].End);
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawSphere(armSegments[i].Start + (RelativeDirection * Amplitude) * Mathf.Sin(Time.time + i * Frequency), .5f);
+        //}
 
         foreach (Line l in armSegments)
         {
             Gizmos.color = Color.green;
             if (l == armSegments[0]) continue;
             Gizmos.DrawSphere(l.Start, .5f);
-            Gizmos.DrawSphere(l.End, .5f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(l.End, .3f);
+
 
         }
     }
