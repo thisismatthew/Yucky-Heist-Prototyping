@@ -11,7 +11,7 @@ public class ArmTrail : MonoBehaviour
 {
     private Line maskingLine;
     [SerializeField] public Line CurrentFrontSegment;
-    [SerializeField] private float newSegmentDistance = 0.1f;
+    [SerializeField] public float newSegmentDistance = 0.1f;
     [HideInInspector] public ArmSpring handLink;
     public float ArmWidth = 1.25f;
     public Color ArmColor;
@@ -20,8 +20,8 @@ public class ArmTrail : MonoBehaviour
     //public bool AtFirstPosition = true;
     //private bool finalRetractionPointReached = false;
     [Header("Wave Stuff")]
-    [SerializeField] private float Amplitude = .2f;
-    [SerializeField] private float Frequency = .3f;
+    [SerializeField] public float Amplitude = .2f;
+    [SerializeField] public float Frequency = .3f;
     //this next field should probably be assigned directly to each line segment via the armSpring object when I refactor
     private List<Vector3> LineRelativeDirections = new List<Vector3>();
 
@@ -114,8 +114,8 @@ public class ArmTrail : MonoBehaviour
         {
             for (int i = 2; i <= armSegments.Count-1; i++)
             {
-                if (LineRelativeDirections[i] == null) return;
                 armSegments[i].End = armSegments[i - 1].Start;
+                if (i > LineRelativeDirections.Count -1) return;
                 var pos = armSegments[i].Start + (LineRelativeDirections[i] * Amplitude) * Mathf.Sin(Time.time + i * Frequency);
                 armSegments[i].Start = pos;
             }
