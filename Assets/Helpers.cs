@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class Helpers
 {
+    public static void RotateToFaceAway(GameObject a, GameObject b, float angleOffset = 0)
+    {
+        //rotates a to face b
+        Vector3 vectorToTarget = b.transform.position- a.transform.position;
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        a.transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward); ;
+    }
     public static void RotateToFace(GameObject a, GameObject b, float angleOffset = 0)
     {
         //rotates a to face b

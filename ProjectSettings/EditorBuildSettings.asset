@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/AnimationTool/SpringBasedSystem/SpringBasedStretching.unity
-    guid: 31718366deb3ec94a8225fd7e062b8f7
+    path: Assets/Prototypes/Dating Sim/Scenes/DateNight - START.unity
+    guid: 11d6988ec0164134e94a3a4598f3cf96
+  - enabled: 1
+    path: Assets/Prototypes/Dating Sim/Scenes/DateNight - Hand Shot.unity
+    guid: 5c97663483e303d4a9d68f4efd5e22b9
+  - enabled: 1
+    path: Assets/Prototypes/Dating Sim/Scenes/Menu Food.unity
+    guid: 1220d1c4a736ae948a7a396c4d985284
+  - enabled: 1
+    path: Assets/Prototypes/Dating Sim/Scenes/Menu Drinks.unity
+    guid: 86337b3af790cea4cbade75f6e9fd563
+  - enabled: 1
+    path: Assets/Prototypes/Dating Sim/Scenes/DateNight - End.unity
+    guid: f16d339d97a713f479693845a20d8db7
   m_configObjects: {}
