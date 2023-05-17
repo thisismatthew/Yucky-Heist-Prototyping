@@ -8,6 +8,7 @@ using TMPro;
 
 public class SimplifiedDialogueUI: StandardDialogueUI
 {
+    
     //public ChoiceTriggerScript[] ChoiceTriggers = new ChoiceTriggerScript[] { };
     public event EventHandler<SelectedResponseEventArgs> SelectedResponseHandler;
     private ChoiceSelectionManager cm;
@@ -18,13 +19,14 @@ public class SimplifiedDialogueUI: StandardDialogueUI
         // Add your code here to do any setup at the beginning of a conversation -- for example,
         // activating or initializing GUI controls.
     }
-
-    public void Close()
-    {
-        // Add your code here to do any cleanup at the end of a conversation -- for example,
-        // deactivating GUI controls.
-    }
     */
+
+    public override void Close()
+    {
+        Debug.Log("Trig");
+        FindAnyObjectByType<ConversationEndTrigger>()?.ConversationEndEffect();
+    }
+    
 
     public override void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
     {
