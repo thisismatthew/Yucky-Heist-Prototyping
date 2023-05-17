@@ -14,6 +14,7 @@ public class SpringOnlyArmManager : MonoBehaviour
     public Color ArmColor;
     public float Gravity = 0.1f;
     public GameObject Hand;
+    public bool FollowMouse = false;
 
     private Vector2 gravity;
     private List<ArmParticle> particles = new List<ArmParticle>();
@@ -88,22 +89,10 @@ public class SpringOnlyArmManager : MonoBehaviour
             p.UpdateParticle();
         }
 
-        if (true)
+        if (FollowMouse)
         {
-            SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
             var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //lets get the direction
-            mousePos.z = 0;
-            Vector3 dir = mousePos - wristParticle.transform.position;
-            dir.Normalize();
-            Vector3 newPos = wristParticle.transform.position + dir * StretchSpeed;
-            //lets only move the hand if its a certain distance from the mouse
-            if (Vector3.Distance(wristParticle.transform.position, mousePos) > handStopsFollowingDistance)
-            {
-                
-                wristParticle.transform.position = Vector3.Lerp(newPos, wristParticle.transform.position, .5f);
-            }
-            wristParticle.Velocity = Vector2.zero;
+            MoveWristToPosition(mousePos);
         }
 
     }
@@ -112,5 +101,21 @@ public class SpringOnlyArmManager : MonoBehaviour
     {
 
         Helpers.RotateToFace(Hand, Hand.transform.position + handPointDirection, 90);
+    }
+
+    public void MoveWristToPosition(Vector3 pos)
+    {
+        SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
+        pos.z = 0;
+        Vector3 dir = pos - wristParticle.transform.position;
+        dir.Normalize();
+        Vector3 newPos = wristParticle.transform.position + dir * StretchSpeed;
+        //lets only move the hand if its a certain distance from the mouse
+        if (Vector3.Distance(wristParticle.transform.position, pos) > handStopsFollowingDistance)
+        {
+
+            wristParticle.transform.position = Vector3.Lerp(newPos, wristParticle.transform.position, .1f);
+        }
+        wristParticle.Velocity = Vector2.zero;
     }
 }
