@@ -9,6 +9,7 @@ using DG.Tweening;
 
 public class ArmTrail : MonoBehaviour
 {
+    public bool HaltSegmentProduction = false;
     private Line maskingLine;
     [SerializeField] public Line CurrentFrontSegment;
     [SerializeField] public float newSegmentDistance = 0.1f;
@@ -46,7 +47,7 @@ public class ArmTrail : MonoBehaviour
         
         //if (armSegments.Count == 1) AtFirstPosition = true; else AtFirstPosition = false;
         if (Input.GetMouseButton(1)) Retract();
-        else CreateTrail();
+        else if (!HaltSegmentProduction) CreateTrail();
         UpdateMaskLine(armSegments.Count == 1);
         SimulateWave();
 

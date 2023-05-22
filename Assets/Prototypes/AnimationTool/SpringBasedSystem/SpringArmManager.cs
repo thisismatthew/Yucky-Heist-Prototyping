@@ -7,9 +7,10 @@ using Shapes;
 public class SpringArmManager : MonoBehaviour
 {
     public bool Paused = false;
-
+    public bool PinWristSegment = false;
     public float StretchSpeed = 0.3f;
     public int NumberOfParticles = 10;
+    public int GrowthNumberOfParticles = 3;
     public float SpringCoefficient = 0.08f;
     public float SpringDesiredSpacing = .1f;
     public float ArmWidth = 1.25f;
@@ -23,6 +24,7 @@ public class SpringArmManager : MonoBehaviour
     private ArmParticle wristParticle; 
     [SerializeField] private ArmTrail trailManager;
     private Vector3 handPointDirection;
+    public bool UseGravity = false;
 
     public ArmParticle WristParticle { get => wristParticle;}
 
@@ -62,9 +64,8 @@ public class SpringArmManager : MonoBehaviour
         //particles[0].Locked = true;
         trailManager.handLink = springs[0];//just hooking up the line with the spring.
         trailManager.handLink.Line.End = Vector2.zero; //lines get spawned with a default (1,0) for thier end point, which causes issues with an always drawing ArmTrail.
-        springs[0].gameObject.name = "spring - HANDLINK";
+        springs[0].gameObject.name = "spring - TRAIL LINK";
         wristParticle = particles[particles.Count - 1];
-        wristParticle.name += " - WRIST";
 
     }
 
@@ -74,6 +75,15 @@ public class SpringArmManager : MonoBehaviour
         if (Paused) return;
         Hand.transform.position = wristParticle.transform.position;
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            for(int i=0; i<GrowthNumberOfParticles; i++)
+            {
+                Invoke("AddParticle", i * 0.2f);
+            }
+        }
+
+        particles[0].Locked = PinWristSegment;
 
         foreach (ArmSpring s in springs)
         {
@@ -85,7 +95,7 @@ public class SpringArmManager : MonoBehaviour
 
         foreach (ArmParticle p in particles)
         {
-            p.ApplyForce(gravity);
+            if (UseGravity) p.ApplyForce(gravity);
             p.UpdateParticle();
         }
 
@@ -112,5 +122,30 @@ public class SpringArmManager : MonoBehaviour
     {
         
         Helpers.RotateToFace(Hand, Hand.transform.position + handPointDirection, 90);
+    }
+
+    public void AddParticle()
+    {
+        
+        ArmParticle p = new GameObject().AddComponent<ArmParticle>();
+        p.gameObject.name = "particle-" + (1 + particles.Count).ToString();
+        //slight offset so they don't freak out the springs initially
+        p.transform.position += new Vector3(this.transform.position.x, this.transform.position.y);
+        p.transform.parent = transform;
+        particles.Insert(particles.Count - 2, p);
+        //new spring
+        ArmSpring finalSpring = new GameObject().AddComponent<ArmSpring>();
+        finalSpring.transform.parent = transform;
+        finalSpring.transform.position = this.transform.position;
+        finalSpring.gameObject.name = "spring-" + (1 + springs.Count).ToString();
+        finalSpring.K = SpringCoefficient;
+        finalSpring.RestLength = SpringDesiredSpacing;
+        finalSpring.Line = finalSpring.gameObject.AddComponent<Line>();
+
+        //connect this particle to be just before the last one
+        finalSpring.B = p;
+        finalSpring.A = springs[springs.Count - 2].A;
+        springs[springs.Count - 2].A = p;
+        springs.Insert(springs.Count -2, finalSpring);
     }
 }
