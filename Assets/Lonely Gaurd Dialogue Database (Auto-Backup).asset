@@ -1685,7 +1685,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "And he\u2019s\r\nhumble! Gah!"
+        value: "And he\u2019s\r humble! Gah!"
         type: 0
         typeString: 
       - title: Sequence
@@ -1768,8 +1768,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 107.47746}
-    canvasZoom: 0.6100005
+    canvasScrollPosition: {x: 330.6667, y: 789.8558}
+    canvasZoom: 0.58650136
   syncInfo:
     syncActors: 0
     syncItems: 0
