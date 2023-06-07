@@ -11,6 +11,7 @@ public class ArmParticle : MonoBehaviour
 
     public void ApplyForce(Vector2 force)
     {
+        if (Locked) return;
         Acceleration += force;
     }
     public void UpdateParticle()

@@ -15,6 +15,9 @@ public class SpringOnlyArmManager : MonoBehaviour
     public float Gravity = 0.1f;
     public GameObject Hand;
     public bool FollowMouse = false;
+    public bool GenerateArmParticlesOnStart = true;
+    public List<Rigidbody2D> followJoints;
+    public GameObject MovementTarget;
 
     private Vector2 gravity;
     private List<ArmParticle> particles = new List<ArmParticle>();
@@ -28,8 +31,10 @@ public class SpringOnlyArmManager : MonoBehaviour
     void Start()
     {
         gravity = new Vector2(0, -Gravity);
+        
         for (int i = 0; i < NumberOfParticles; i++)
         {
+            if (GenerateArmParticlesOnStart == false) break;
             //spawn a particle
             ArmParticle p = new GameObject().AddComponent<ArmParticle>();
             p.gameObject.name = "particle-" + i.ToString();
@@ -66,7 +71,20 @@ public class SpringOnlyArmManager : MonoBehaviour
         wristParticle.Locked = true;
         particles[0].Locked = true;
 
-
+        //this is for the following smoother using the funky triangle of springs to puppet the wrist particle about.
+        Rigidbody2D rb = wristParticle.gameObject.AddComponent(typeof(Rigidbody2D)) as Rigidbody2D;
+        rb.gravityScale = 0;
+        foreach(Rigidbody2D point in followJoints)
+        {
+            SpringJoint2D spring  = wristParticle.gameObject.AddComponent<SpringJoint2D>();
+            spring.autoConfigureDistance = false;
+            spring.distance = 1;
+            spring.dampingRatio = .9f;
+            spring.frequency = .5f;
+            spring.breakForce = Mathf.Infinity;
+            spring.connectedBody = point;
+        }
+        
     }
 
     // Update is called once per frame
@@ -92,7 +110,9 @@ public class SpringOnlyArmManager : MonoBehaviour
         if (FollowMouse)
         {
             var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            MoveWristToPosition(mousePos);
+            MovementTarget.transform.position = mousePos;
+            //instead of moving the wrist to position we're going to move the triangle to follow mouse position
+            //MoveWristToPosition(mousePos);
         }
 
     }
