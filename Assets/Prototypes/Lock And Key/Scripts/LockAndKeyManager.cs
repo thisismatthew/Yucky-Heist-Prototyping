@@ -18,7 +18,9 @@ public class LockAndKeyManager : MonoBehaviour
         {
             foreach (InteractionKey key in Keys)
             {
-                if (Vector3.Distance(transform.position+PickupOffset, key.transform.position) < PickupRadius)
+                Debug.Log("Key:" + key.name);
+
+                if (Vector3.Distance(transform.position, key.GetClosestPointOnCollider(transform.position)) < PickupRadius)
                 {
                     AddHeldObject(key);
                     Debug.Log("Picked Up: " + key.name);
@@ -36,10 +38,20 @@ public class LockAndKeyManager : MonoBehaviour
         HeldObject = _obj;
         _obj.transform.parent = transform;
         _obj.transform.localPosition = Vector3.zero + PickupOffset;
+        Rigidbody2D rb = HeldObject.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+        }
     }
 
     public void DropHeldObject(InteractionKey _obj)
     {
+        Rigidbody2D rb = HeldObject.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+        }
         _obj.Held = false;
         Keys.Add(_obj);
         HeldObject = null;
@@ -47,9 +59,17 @@ public class LockAndKeyManager : MonoBehaviour
         _obj.transform.parent = null;
     }
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = GizmoColour;
-        Gizmos.DrawWireSphere(this.transform.position + PickupOffset, PickupRadius);
-    }
+        Gizmos.DrawWireSphere(this.transform.position, PickupRadius);
+        foreach (InteractionKey key in Keys)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(key.GetClosestPointOnCollider(transform.position), .3f);
+        }
+    }*/
+
+
+    
 }

@@ -5884,5 +5884,17 @@ PrefabInstance:
       propertyPath: StretchSpeed
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 1186102472480335927, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
+      propertyPath: NumberOfParticles
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186102472480335927, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
+      propertyPath: SpringCoefficient
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186102472480335927, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
+      propertyPath: SpringDesiredSpacing
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}

@@ -18,6 +18,8 @@ public class SpringArmManager : MonoBehaviour
     public float Gravity = 0.1f;
     public GameObject Hand;
 
+    private float finalStretchTime = 0.2f;
+    private float finalStretchTimer = 0;
     private Vector2 gravity;
     private List<ArmParticle> particles = new List<ArmParticle>();
     private List<ArmSpring> springs = new List<ArmSpring>();
@@ -70,7 +72,7 @@ public class SpringArmManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Paused) return;
         Hand.transform.position = wristParticle.transform.position;
@@ -101,6 +103,8 @@ public class SpringArmManager : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            finalStretchTimer = finalStretchTime;
+
             SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
             var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //lets get the direction
@@ -113,9 +117,25 @@ public class SpringArmManager : MonoBehaviour
         }
         if (Input.GetMouseButton(1))
         {
+            finalStretchTimer = finalStretchTime;
             SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
         }
         //Debug.Log("tick");
+
+        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1))
+        {
+            if (finalStretchTimer < 0) return;
+            finalStretchTimer -= Time.deltaTime;
+            SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
+            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //lets get the direction
+            mousePos.z = 0;
+            Vector3 dir = mousePos - wristParticle.transform.position;
+            dir.Normalize();
+            Vector3 newPos = wristParticle.transform.position + dir * 0.1f;
+            wristParticle.transform.position = newPos;
+            wristParticle.Velocity = Vector2.zero;
+        }
     }
 
     public void SetHandPointDirection(Vector3 handPointDirection)

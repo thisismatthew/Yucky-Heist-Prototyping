@@ -97,6 +97,11 @@ public class SpringOnlyArmManager : MonoBehaviour
 
     }
 
+    private void FixedUpdate()
+    {
+        SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
+    }
+
     public void SetHandPointDirection(Vector3 handPointDirection)
     {
 

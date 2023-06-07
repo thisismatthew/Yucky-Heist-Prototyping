@@ -866,7 +866,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055557205}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -45.602036, y: -24.40705, z: -10}
+  m_LocalPosition: {x: -45.619915, y: -24.40705, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2043,11 +2043,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1186102472480335927, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
       propertyPath: StretchSpeed
-      value: 0.3
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 1186102472480335927, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
       propertyPath: PinWristSegment
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186102472480335927, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
+      propertyPath: SpringDesiredSpacing
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1186102472480335946, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
       propertyPath: ArmWidth
@@ -2059,7 +2063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1186102472480335946, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
       propertyPath: RetractSpeed
-      value: 0.5
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1186102472480335946, guid: ea7009a1837ab674cab8379fe2980d48, type: 3}
       propertyPath: HaltSegmentProduction
