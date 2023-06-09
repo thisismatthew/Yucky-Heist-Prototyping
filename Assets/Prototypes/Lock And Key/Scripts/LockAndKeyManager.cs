@@ -15,7 +15,7 @@ public class LockAndKeyManager : MonoBehaviour
     private void Update()
     {
         //need to account for cases where pickupables are next to each other.
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetMouseButtonDown(0))
         {
             foreach (InteractionKey key in Keys)
             {

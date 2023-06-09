@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Prototypes/Pickpocket/Scenes/Pickpocket - Alternate Controlls.unity
+    guid: 63fa27fb38cb9f342be1305f5b4d1e18
+  - enabled: 0
     path: Assets/Prototypes/Lock And Key/Scenes/LockAndKey - Level View.unity
     guid: d66db1320a9554244bc31a40b13a851b
   - enabled: 0
