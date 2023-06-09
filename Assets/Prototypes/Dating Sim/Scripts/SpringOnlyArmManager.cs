@@ -57,6 +57,7 @@ public class SpringOnlyArmManager : MonoBehaviour
                 s.K = SpringCoefficient;
                 s.RestLength = SpringDesiredSpacing;
                 s.Line = s.gameObject.AddComponent<Line>();
+                s.Line.SortingOrder = 2;
                 springs.Add(s);
                 //s.lineColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
 
@@ -71,26 +72,27 @@ public class SpringOnlyArmManager : MonoBehaviour
         wristParticle.Locked = true;
         particles[0].Locked = true;
 
-        //this is for the following smoother using the funky triangle of springs to puppet the wrist particle about.
-        Rigidbody2D rb = wristParticle.gameObject.AddComponent(typeof(Rigidbody2D)) as Rigidbody2D;
-        rb.gravityScale = 0;
-        foreach(Rigidbody2D point in followJoints)
-        {
-            SpringJoint2D spring  = wristParticle.gameObject.AddComponent<SpringJoint2D>();
-            spring.autoConfigureDistance = false;
-            spring.distance = 1;
-            spring.dampingRatio = .9f;
-            spring.frequency = .5f;
-            spring.breakForce = Mathf.Infinity;
-            spring.connectedBody = point;
-        }
+        ////this is for the following smoother using the funky triangle of springs to puppet the wrist particle about.
+        //Rigidbody2D rb = wristParticle.gameObject.AddComponent(typeof(Rigidbody2D)) as Rigidbody2D;
+        //rb.gravityScale = 0;
+        //foreach(Rigidbody2D point in followJoints)
+        //{
+        //    SpringJoint2D spring  = wristParticle.gameObject.AddComponent<SpringJoint2D>();
+        //    spring.autoConfigureDistance = false;
+        //    spring.distance = 1;
+        //    spring.dampingRatio = .9f;
+        //    spring.frequency = .5f;
+        //    spring.breakForce = Mathf.Infinity;
+        //    spring.connectedBody = point;
+        //}
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        Hand.transform.position = wristParticle.transform.position;
+        
+        wristParticle.transform.position = Hand.transform.position;
 
 
         foreach (ArmSpring s in springs)
@@ -110,6 +112,7 @@ public class SpringOnlyArmManager : MonoBehaviour
         if (FollowMouse)
         {
             var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            
             MovementTarget.transform.position = mousePos;
             //instead of moving the wrist to position we're going to move the triangle to follow mouse position
             //MoveWristToPosition(mousePos);

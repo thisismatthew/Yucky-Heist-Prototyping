@@ -10,6 +10,7 @@ public class LockAndKeyManager : MonoBehaviour
     public float PickupRadius = 4;
     public Vector3 PickupOffset;
     public Color GizmoColour;
+    public List<Collider2D> HandColliders;
 
     private void Update()
     {
@@ -32,6 +33,16 @@ public class LockAndKeyManager : MonoBehaviour
     }
     public void AddHeldObject(InteractionKey _obj)
     {
+        //when we pick something up we disable all the colliders on the hand.
+        //if we are holding something we will drop what we are holding.
+        //we remove the object we picked up from the list of objects we are able to pick up.
+        //stick it in the middle of the hand.
+        //and turn on the objects rigidbody (maybe don't need to do this?)
+        Collider2D objCol = _obj.GetComponent<Collider2D>();
+        foreach (Collider2D collider in HandColliders)
+        {
+            Physics2D.IgnoreCollision(objCol, collider, true);
+        }
         _obj.Held = true;
         if (HeldObject != null) DropHeldObject(HeldObject);
         Keys.Remove(_obj);
@@ -43,10 +54,16 @@ public class LockAndKeyManager : MonoBehaviour
         {
             rb.isKinematic = true;
         }
+        
     }
 
     public void DropHeldObject(InteractionKey _obj)
     {
+        Collider2D objCol = _obj.GetComponent<Collider2D>();
+        foreach (Collider2D collider in HandColliders)
+        {
+            Physics2D.IgnoreCollision(objCol, collider, false);
+        }
         Rigidbody2D rb = HeldObject.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
@@ -59,17 +76,17 @@ public class LockAndKeyManager : MonoBehaviour
         _obj.transform.parent = null;
     }
 
-    /*private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = GizmoColour;
         Gizmos.DrawWireSphere(this.transform.position, PickupRadius);
-        foreach (InteractionKey key in Keys)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(key.GetClosestPointOnCollider(transform.position), .3f);
-        }
-    }*/
+        //foreach (InteractionKey key in Keys)
+        //{
+        //    Gizmos.color = Color.green;
+        //    Gizmos.DrawSphere(key.GetClosestPointOnCollider(transform.position), .3f);
+        //}
+    }
 
 
-    
+
 }
