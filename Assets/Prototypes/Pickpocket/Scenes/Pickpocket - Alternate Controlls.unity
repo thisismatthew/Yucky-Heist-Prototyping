@@ -434,7 +434,7 @@ SpringJoint2D:
   m_AutoConfigureDistance: 0
   m_Distance: 2
   m_DampingRatio: 0.9
-  m_Frequency: 2
+  m_Frequency: 15
 --- !u!1 &289830153
 GameObject:
   m_ObjectHideFlags: 0
@@ -1142,6 +1142,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 686391128}
+  - component: {fileID: 686391132}
   - component: {fileID: 686391130}
   - component: {fileID: 686391131}
   m_Layer: 0
@@ -1195,7 +1196,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686391127}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -1238,6 +1239,36 @@ PolygonCollider2D:
       - {x: 1.0243503, y: 0.050469637}
       - {x: 1.9735644, y: 1.8382416}
       - {x: 2.0697546, y: 2.3554153}
+--- !u!60 &686391132
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686391127}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.16650295, y: 5.5727835}
+      - {x: -0.918715, y: 1.0428436}
+      - {x: -0.7196058, y: -0.11954105}
+      - {x: 0.8783103, y: 0.19632459}
+      - {x: 0.68004954, y: 1.4906931}
 --- !u!1 &829308454
 GameObject:
   m_ObjectHideFlags: 0
@@ -1311,7 +1342,7 @@ SpringJoint2D:
   m_AutoConfigureDistance: 0
   m_Distance: 2
   m_DampingRatio: 0.9
-  m_Frequency: 2
+  m_Frequency: 15
 --- !u!1 &886848376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,7 +1416,7 @@ SpringJoint2D:
   m_AutoConfigureDistance: 0
   m_Distance: 2
   m_DampingRatio: 0.9
-  m_Frequency: 2
+  m_Frequency: 15
 --- !u!1 &896032134
 GameObject:
   m_ObjectHideFlags: 0
@@ -2567,7 +2598,7 @@ MonoBehaviour:
   PickupOffset: {x: 0, y: 0, z: 0}
   GizmoColour: {r: 1, g: 0, b: 0, a: 1}
   HandColliders:
-  - {fileID: 686391131}
+  - {fileID: 686391132}
 --- !u!1 &1484862208
 GameObject:
   m_ObjectHideFlags: 0
@@ -2848,7 +2879,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 10.561956
+  m_Mass: 10.561958
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
@@ -3833,6 +3864,8 @@ MonoBehaviour:
   - {fileID: 214497607}
   - {fileID: 829308457}
   MovementTarget: {fileID: 1533212941}
+  RotationOffset: 90
+  RotationSpeed: 30
 --- !u!4 &1910528959
 Transform:
   m_ObjectHideFlags: 0

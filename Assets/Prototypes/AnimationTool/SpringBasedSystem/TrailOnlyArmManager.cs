@@ -1,37 +1,34 @@
-using Shapes;
 using System.Collections;
 using System.Collections.Generic;
+using Shapes;
 using UnityEngine;
-using DG.Tweening;
 
-// I was fixing the issue with the arm allignment when retracted all the way back to first position but it appears to be fixed!
-// maybe i did it yesterday and I forgot, or maybe it's just because at low stretch/retract speeds it doesn't occur?
-
-public class ArmTrail : MonoBehaviour
+public class TrailOnlyArmManager : MonoBehaviour
 {
-    public bool HaltSegmentProduction = false;
+
+    public float StretchSpeed = 0.3f;
+    public GameObject Hand;
+
     private Line maskingLine;
     [SerializeField] public Line CurrentFrontSegment;
     [SerializeField] public float newSegmentDistance = 0.1f;
-    [HideInInspector] public ArmSpring handLink;
+
     public float ArmWidth = 1.25f;
     public Color ArmColor;
     private List<Line> armSegments = new List<Line>();
     public float RetractSpeed = .5f;
-    public bool AutoRetract = true;
-    //public bool AtFirstPosition = true;
-    //private bool finalRetractionPointReached = false;
+    
     [Header("Wave Stuff")]
-    [SerializeField] public float Amplitude = .2f;
-    [SerializeField] public float Frequency = .3f;
+    [SerializeField] public float Amplitude = .0008f;
+    [SerializeField] public float Frequency = .5f;
     //this next field should probably be assigned directly to each line segment via the armSpring object when I refactor
     private List<Vector3> LineRelativeDirections = new List<Vector3>();
 
     private void Start()
     {
-        maskingLine = new GameObject().AddComponent<Line>(); 
+        maskingLine = new GameObject().AddComponent<Line>();
         maskingLine.transform.parent = transform;
-        maskingLine.transform.position = transform.position;
+        //maskingLine.transform.position = Hand.transform.position - transform.position;
         maskingLine.name = "MaskingLine";
         maskingLine.Color = ArmColor;
         maskingLine.Thickness = ArmWidth;
@@ -42,34 +39,28 @@ public class ArmTrail : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(Vector2.Distance(CurrentFrontSegment.Start, handLink.Line.End));
-
-        if (handLink == null) return;
-
-        //if (armSegments.Count == 1) AtFirstPosition = true; else AtFirstPosition = false;
-        if (Input.GetMouseButton(1) || (!Input.GetMouseButton(0) && AutoRetract))
-        { 
-            Retract();
-        }
-        else if (!HaltSegmentProduction) CreateTrail();
+        if (Input.GetMouseButton(0)) CreateTrail();
+        else Retract();
         UpdateMaskLine(armSegments.Count == 1);
         SimulateWave();
-
-
     }
 
     private void UpdateMaskLine(bool atFirstLink)
     {
         //the mask line connect the gap that can occur between the springy wrist and the trail end (current front segment end)
-        maskingLine.Start = handLink.Line.End;
+        maskingLine.Start = Hand.transform.position;
         if (atFirstLink) maskingLine.End = CurrentFrontSegment.Start;
-        else maskingLine.End = CurrentFrontSegment.Start - transform.position;
+        else maskingLine.End = CurrentFrontSegment.Start;
     }
     private void CreateTrail()
     {
-        
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Hand.transform.position = Vector2.MoveTowards(Hand.transform.position, mousePos, StretchSpeed);
+        //CurrentFrontSegment.Start = Hand.transform.position;
+        Helpers.RotateToFace(Hand, mousePos, 90);
+
         // if the hand link end gets too far from the current segment's end point spawn a new segment.
-        if (Vector2.Distance(CurrentFrontSegment.Start, handLink.Line.End + transform.position) > newSegmentDistance)
+        if (Vector2.Distance(CurrentFrontSegment.Start, Hand.transform.position) > newSegmentDistance)
         {
             //Debug.Log(CurrentFrontSegment.Start);
             //Debug.Log(handLink.Line.End + transform.position);
@@ -77,9 +68,9 @@ public class ArmTrail : MonoBehaviour
             var newSegment = new GameObject().AddComponent<Line>();
             newSegment.name = "Trail Segment - " + (armSegments.Count - 1);
             newSegment.gameObject.transform.parent = transform;
-            newSegment.End = CurrentFrontSegment.Start;
+            newSegment.End = CurrentFrontSegment.Start - transform.position;
             if (armSegments.Count == 1) { newSegment.End += transform.position; }
-            newSegment.Start = handLink.Line.End + transform.position;
+            newSegment.Start = Hand.transform.position;
             newSegment.Color = ArmColor;
             newSegment.Thickness = ArmWidth;
             armSegments.Add(newSegment);
@@ -91,17 +82,18 @@ public class ArmTrail : MonoBehaviour
     private void Retract()
     {
         Vector2 targetPos;
-        if (armSegments.Count > 1) targetPos = Vector2.MoveTowards(handLink.B.transform.localPosition, CurrentFrontSegment.Start - transform.position, RetractSpeed);
-        else targetPos = Vector2.MoveTowards(handLink.B.transform.localPosition, CurrentFrontSegment.Start, RetractSpeed);
-        handLink.B.transform.localPosition = targetPos;
-        if (Vector2.Distance(handLink.Line.End, CurrentFrontSegment.Start - transform.position) < newSegmentDistance / 2)
+        SetHandPointDirection((CurrentFrontSegment.Start - CurrentFrontSegment.End).normalized);
+        if (armSegments.Count > 1) targetPos = Vector2.MoveTowards(Hand.transform.position, CurrentFrontSegment.Start , RetractSpeed);
+        else targetPos = Vector2.MoveTowards(Hand.transform.position, CurrentFrontSegment.Start, RetractSpeed);
+        Hand.transform.position = targetPos;
+        if (Vector2.Distance(Hand.transform.position, CurrentFrontSegment.Start ) < newSegmentDistance / 2)
         {
             if (armSegments.Count == 1)
             {
                 //if the arm is done stretching back lets rotate it along the direction of the starting line
                 Vector2 dir = (CurrentFrontSegment.End - CurrentFrontSegment.Start).normalized;
                 //Todo: these two scripts should probably be one script and that's why i'm making this gross call.
-                FindAnyObjectByType<SpringArmManager>().SetHandPointDirection(dir);
+                SetHandPointDirection(dir);
                 return;
             }
 
@@ -117,10 +109,10 @@ public class ArmTrail : MonoBehaviour
         //so we're looping through the arm segments if we have at least 2
         if (armSegments.Count > 2)
         {
-            for (int i = 2; i <= armSegments.Count-1; i++)
+            for (int i = 2; i <= armSegments.Count - 1; i++)
             {
                 armSegments[i].End = armSegments[i - 1].Start;
-                if (i > LineRelativeDirections.Count -1) return;
+                if (i > LineRelativeDirections.Count - 1) return;
                 var pos = armSegments[i].Start + (LineRelativeDirections[i] * Amplitude) * Mathf.Sin(Time.time + i * Frequency);
                 armSegments[i].Start = pos;
             }
@@ -149,5 +141,9 @@ public class ArmTrail : MonoBehaviour
         }
     }
 
+    public void SetHandPointDirection(Vector3 handPointDirection)
+    {
 
+        Helpers.RotateToFace(Hand, Hand.transform.position + handPointDirection, 90);
+    }
 }
