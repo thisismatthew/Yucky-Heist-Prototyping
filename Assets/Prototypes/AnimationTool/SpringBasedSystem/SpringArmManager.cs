@@ -77,13 +77,13 @@ public class SpringArmManager : MonoBehaviour
         if (Paused) return;
         Hand.transform.position = wristParticle.transform.position;
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            for(int i=0; i<GrowthNumberOfParticles; i++)
-            {
-                Invoke("AddParticle", i * 0.2f);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    for(int i=0; i<GrowthNumberOfParticles; i++)
+        //    {
+        //        Invoke("AddParticle", i * 0.2f);
+        //    }
+        //}
 
         particles[0].Locked = PinWristSegment;
 
@@ -115,14 +115,14 @@ public class SpringArmManager : MonoBehaviour
             wristParticle.transform.position = newPos;
             wristParticle.Velocity = Vector2.zero;
         }
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) || (!Input.GetMouseButton(0) && trailManager.AutoRetract)) 
         {
             finalStretchTimer = finalStretchTime;
             SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
         }
         //Debug.Log("tick");
 
-        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1))
+        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !trailManager.AutoRetract)
         {
             if (finalStretchTimer < 0) return;
             finalStretchTimer -= Time.deltaTime;

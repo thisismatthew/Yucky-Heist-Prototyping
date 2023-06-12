@@ -19,6 +19,10 @@ public class SpringOnlyArmManager : MonoBehaviour
     public List<Rigidbody2D> followJoints;
     public GameObject MovementTarget;
 
+    [Header("Hand Rotation")]
+    public float RotationOffset = 90;
+    public float RotationSpeed = 10f;
+
     private Vector2 gravity;
     private List<ArmParticle> particles = new List<ArmParticle>();
     private List<ArmSpring> springs = new List<ArmSpring>();
@@ -127,8 +131,7 @@ public class SpringOnlyArmManager : MonoBehaviour
 
     public void SetHandPointDirection(Vector3 handPointDirection)
     {
-
-        Helpers.RotateToFace(Hand, Hand.transform.position + handPointDirection, 90);
+        Helpers.SlerpToFace(Hand, Hand.transform.position + handPointDirection, RotationSpeed , RotationOffset);
     }
 
     public void MoveWristToPosition(Vector3 pos)
