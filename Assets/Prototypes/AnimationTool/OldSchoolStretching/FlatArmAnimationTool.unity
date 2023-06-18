@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSegment: {fileID: 992307146}
-  maximumSegmentLength: 0.3
+  maximumSegmentLength: 0.6
   linePrefab: {fileID: 7239753564606019394, guid: 22c94b80e4e650047bd38ad1c8047092, type: 3}
   hand: {fileID: 520191927}
   stopRadiusFromMouse: 0.5
