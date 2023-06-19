@@ -45,6 +45,7 @@ public class SpringOnlyArmManager : MonoBehaviour
             //slight offset so they don't freak out the springs initially
             p.transform.position += new Vector3(this.transform.position.x, this.transform.position.y);
             p.transform.parent = transform;
+            //p.gameObject.AddComponent<CircleCollider2D>();
             particles.Add(p);
             //p.gameObject.hideFlags = HideFlags.HideInHierarchy;
 
