@@ -17,6 +17,7 @@ public class SpringArmManager : MonoBehaviour
     public Color ArmColor;
     public float Gravity = 0.1f;
     public GameObject Hand;
+    public Transform StretchTargetForCollision;
 
     private float finalStretchTime = 0.2f;
     private float finalStretchTimer = 0;
@@ -101,36 +102,47 @@ public class SpringArmManager : MonoBehaviour
             p.UpdateParticle();
         }
 
+        
+        /*  This is for the stretching of the particles at the end of the arm
+         *  
+         */
         if (Input.GetMouseButton(0))
         {
+            
             finalStretchTimer = finalStretchTime;
 
             SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
-            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //lets get the direction
-            mousePos.z = 0;
-            Vector3 dir = mousePos - wristParticle.transform.position;
+            //mousePos.z = 0;
+            Vector3 dir = StretchTargetForCollision.position - wristParticle.transform.position;
             dir.Normalize();
             Vector3 newPos = wristParticle.transform.position + dir * StretchSpeed;
             wristParticle.transform.position = newPos;
             wristParticle.Velocity = Vector2.zero;
         }
+
+        // Signiling a retraction
         if (Input.GetMouseButton(1) || (!Input.GetMouseButton(0) && trailManager.AutoRetract)) 
-        {
+        {   
+
             finalStretchTimer = finalStretchTime;
             SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
         }
         //Debug.Log("tick");
 
+
+        // acutally retracting, the signal is there so the retraction goes
+        // a little longer after the mouse has let go, like coyote time but for retraction
         if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !trailManager.AutoRetract)
         {
             if (finalStretchTimer < 0) return;
             finalStretchTimer -= Time.deltaTime;
             SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
-            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //lets get the direction
-            mousePos.z = 0;
-            Vector3 dir = mousePos - wristParticle.transform.position;
+            //mousePos.z = 0;
+            Vector3 dir = StretchTargetForCollision.position - wristParticle.transform.position;
             dir.Normalize();
             Vector3 newPos = wristParticle.transform.position + dir * 0.1f;
             wristParticle.transform.position = newPos;
