@@ -26,6 +26,7 @@ public class ArmTrail : MonoBehaviour
     [SerializeField] public float Frequency = .3f;
     //this next field should probably be assigned directly to each line segment via the armSpring object when I refactor
     private List<Vector3> LineRelativeDirections = new List<Vector3>();
+    public int ShapesLayer = 0;
 
     private void Start()
     {
@@ -123,6 +124,7 @@ public class ArmTrail : MonoBehaviour
                 if (i > LineRelativeDirections.Count -1) return;
                 var pos = armSegments[i].Start + (LineRelativeDirections[i] * Amplitude) * Mathf.Sin(Time.time + i * Frequency);
                 armSegments[i].Start = pos;
+                armSegments[i].SortingOrder = ShapesLayer;
             }
             //armSegments[armSegments.Count-1].End = armSegments[armSegments.Count - 2].Start;
         }

@@ -75,22 +75,7 @@ public class SpringOnlyArmManager : MonoBehaviour
         wristParticle = particles[particles.Count - 1];
         wristParticle.name += " - WRIST";
         wristParticle.Locked = true;
-        particles[0].Locked = true;
-
-        ////this is for the following smoother using the funky triangle of springs to puppet the wrist particle about.
-        //Rigidbody2D rb = wristParticle.gameObject.AddComponent(typeof(Rigidbody2D)) as Rigidbody2D;
-        //rb.gravityScale = 0;
-        //foreach(Rigidbody2D point in followJoints)
-        //{
-        //    SpringJoint2D spring  = wristParticle.gameObject.AddComponent<SpringJoint2D>();
-        //    spring.autoConfigureDistance = false;
-        //    spring.distance = 1;
-        //    spring.dampingRatio = .9f;
-        //    spring.frequency = .5f;
-        //    spring.breakForce = Mathf.Infinity;
-        //    spring.connectedBody = point;
-        //}
-        
+        particles[0].Locked = true;  
     }
 
     // Update is called once per frame

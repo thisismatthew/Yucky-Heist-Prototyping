@@ -18,6 +18,7 @@ public class SpringArmManager : MonoBehaviour
     public float Gravity = 0.1f;
     public GameObject Hand;
     public Transform StretchTargetForCollision;
+    
 
     private float finalStretchTime = 0.2f;
     private float finalStretchTimer = 0;
@@ -94,6 +95,7 @@ public class SpringArmManager : MonoBehaviour
             s.UpdateSpringVisuals();
             s.Line.Color = ArmColor;
             s.Line.Thickness = ArmWidth;
+            
         }
 
         foreach (ArmParticle p in particles)
@@ -102,19 +104,13 @@ public class SpringArmManager : MonoBehaviour
             p.UpdateParticle();
         }
 
-        
-        /*  This is for the stretching of the particles at the end of the arm
-         *  
-         */
+        //stretching & retracting
+        #region
+        //This is for the stretching of the particles at the end of the arm
         if (Input.GetMouseButton(0))
         {
-            
             finalStretchTimer = finalStretchTime;
-
             SetHandPointDirection((springs[springs.Count - 1].Line.Start - springs[springs.Count - 1].Line.End).normalized);
-            //var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //lets get the direction
-            //mousePos.z = 0;
             Vector3 dir = StretchTargetForCollision.position - wristParticle.transform.position;
             dir.Normalize();
             Vector3 newPos = wristParticle.transform.position + dir * StretchSpeed;
@@ -148,6 +144,7 @@ public class SpringArmManager : MonoBehaviour
             wristParticle.transform.position = newPos;
             wristParticle.Velocity = Vector2.zero;
         }
+        #endregion
     }
 
     public void SetHandPointDirection(Vector3 handPointDirection)

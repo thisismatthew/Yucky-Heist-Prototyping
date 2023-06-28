@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Prototypes/Pickpocket/Scenes/Pickpocket - Alternate Controlls.unity
     guid: 63fa27fb38cb9f342be1305f5b4d1e18
   - enabled: 0
