@@ -20,11 +20,11 @@ public class SpringArmManager : MonoBehaviour
     public Transform StretchTargetForCollision;
     
 
-    private float finalStretchTime = 0.2f;
+    private readonly float finalStretchTime = 0.2f;
     private float finalStretchTimer = 0;
     private Vector2 gravity;
-    private List<ArmParticle> particles = new List<ArmParticle>();
-    private List<ArmSpring> springs = new List<ArmSpring>();
+    private readonly List<ArmParticle> particles = new();
+    private readonly List<ArmSpring> springs = new();
     private ArmParticle wristParticle; 
     [SerializeField] private ArmTrail trailManager;
     private Vector3 handPointDirection;
@@ -40,7 +40,7 @@ public class SpringArmManager : MonoBehaviour
         {
             //spawn a particle
             ArmParticle p = new GameObject().AddComponent<ArmParticle>();
-            p.gameObject.name = "particle-" + i.ToString();
+            p.gameObject.name = $"particle-{i}";
             //slight offset so they don't freak out the springs initially
             p.transform.position += new Vector3(this.transform.position.x, this.transform.position.y);
             p.transform.parent = transform;
@@ -54,7 +54,7 @@ public class SpringArmManager : MonoBehaviour
                 ArmSpring s = new GameObject().AddComponent<ArmSpring>();
                 s.transform.parent = transform;
                 s.transform.position = this.transform.position;
-                s.gameObject.name = "spring-" + i.ToString();
+                s.gameObject.name = $"spring-{i}";
                 s.A = a;
                 s.B = b;
                 s.K = SpringCoefficient;
@@ -128,7 +128,7 @@ public class SpringArmManager : MonoBehaviour
         //Debug.Log("tick");
 
 
-        // acutally retracting, the signal is there so the retraction goes
+        // actually retracting, the signal is there so the retraction goes
         // a little longer after the mouse has let go, like coyote time but for retraction
         if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !trailManager.AutoRetract)
         {
@@ -153,7 +153,7 @@ public class SpringArmManager : MonoBehaviour
         Helpers.RotateToFace(Hand, Hand.transform.position + handPointDirection, 90);
     }
 
-    public void AddParticle()
+    /*public void AddParticle()
     {
         
         ArmParticle p = new GameObject().AddComponent<ArmParticle>();
@@ -176,5 +176,5 @@ public class SpringArmManager : MonoBehaviour
         finalSpring.A = springs[springs.Count - 2].A;
         springs[springs.Count - 2].A = p;
         springs.Insert(springs.Count -2, finalSpring);
-    }
+    }*/
 }

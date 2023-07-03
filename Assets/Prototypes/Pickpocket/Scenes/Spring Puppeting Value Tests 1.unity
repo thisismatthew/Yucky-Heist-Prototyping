@@ -1641,17 +1641,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: CloseUpArm - Polygon Collider - Spring Dampened Controls
       objectReference: {fileID: 0}
+    - target: {fileID: 5495780536702998406, guid: 31c4d4b94692f1f47bd5d8144e6cefe2, type: 3}
+      propertyPath: FollowMouse
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5495780536702998407, guid: 31c4d4b94692f1f47bd5d8144e6cefe2, type: 3}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5495780536702998407, guid: 31c4d4b94692f1f47bd5d8144e6cefe2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -39.7
+      value: -18.57
       objectReference: {fileID: 0}
     - target: {fileID: 5495780536702998407, guid: 31c4d4b94692f1f47bd5d8144e6cefe2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14.5
+      value: -5.76
       objectReference: {fileID: 0}
     - target: {fileID: 5495780536702998407, guid: 31c4d4b94692f1f47bd5d8144e6cefe2, type: 3}
       propertyPath: m_LocalPosition.z
